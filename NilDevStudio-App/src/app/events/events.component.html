@@ -1,8 +1,57 @@
-<div *ngFor="let event of events">
-  Tema: {{ event.theme }}
-  <br>
-  Local: {{ event.local }}
-  <br>
-  Data: {{ event.dataEvent }}
-  <hr>
+<div class="form-inline">
+    <div class="form-group mb-2">
+        <label class="mr-2">Filter:</label><input type="text" class="form-control mr-2" placeholder="search"
+        [(ngModel)]="filterList">
+    </div>
 </div>
+
+<h3>Filter: {{filterList}}</h3>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                <button class="btn btn-outline-primary"
+                (click)="ToggleImage()">
+                    Show/Hide Image
+                </button>
+            </th>
+            <th>#</th>
+            <th>Theme</th>
+            <th>Local</th>
+            <th>Date</th>
+            <th>Qtd People</th>
+            <th>Lot</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="events && events.length">
+        <tr *ngFor= "let event of FilteredEvents">
+            <td>
+                <img *ngIf="imageToggle"
+                src="http://localhost:5000/img{{event.imageUrl}}"
+                [style.width.px]="imageWidth"
+                [style.margin.px]="imageMargin">
+            </td>
+            <td>{{event.eventId}}</td>
+            <td>{{event.theme}}</td>
+            <td>{{event.local}}</td>
+            <td>{{event.dataEvent}}</td>
+            <td>{{event.quantPeople}}</td>
+            <td>{{event.lot | uppercase}}</td>
+            <td>
+                <button class="btn btn-success"></button>
+                <button class="btn btn-danger"></button>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot *ngIf="!events.length">
+        <tr>
+            <td colspan="7" class="text-center">
+                <h3>
+                    Nenhum evento encontrado!
+                </h3>
+            </td>
+        </tr>
+    </tfoot>
+</table>
