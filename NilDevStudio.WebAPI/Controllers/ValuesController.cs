@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NilDevStudio.WebAPI.Data;
-using NilDevStudio.WebAPI.Models;
+using NilDevStudio.Repository;
 
 namespace NilDevStudio.WebAPI.Controllers
 {
@@ -14,8 +13,8 @@ namespace NilDevStudio.WebAPI.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        public readonly DataContext _context;
-        public ValuesController(DataContext context)
+        public readonly NilDevContext _context;
+        public ValuesController(NilDevContext context)
         {
             _context = context;
 
@@ -44,7 +43,7 @@ namespace NilDevStudio.WebAPI.Controllers
             try
             {
                 var results = await _context.MyEvents.FirstOrDefaultAsync(
-                    x => x.EventId == id); 
+                    x => x.Id == id); 
                 return Ok(results);  
             }
             catch (System.Exception)
