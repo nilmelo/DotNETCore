@@ -29,6 +29,7 @@ namespace NilDevStudio.WebAPI
         {
             services.AddDbContext<NilDevContext>(
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<INilDevRepository, NilDevRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
         }
