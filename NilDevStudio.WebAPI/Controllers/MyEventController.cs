@@ -73,7 +73,7 @@ namespace NilDevStudio.WebAPI.Controllers
             }
             catch (System.Exception)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Error occurred in database");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "[ERROR_DB] Error occurred in database");
             }
 
             return BadRequest();

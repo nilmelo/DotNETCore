@@ -12,6 +12,8 @@ namespace NilDevStudio.Repository
         {
             _context = context;
 
+            //
+            //_context.ChangeTracker.QueryTrackBehaviour = QueryTrackBehaviour.NoTracking;
         }
 
         // General
@@ -30,11 +32,11 @@ namespace NilDevStudio.Repository
             _context.Remove(entity);
         }
 
-        public async Task<bool> SaveChangesAsync()    
+        public async Task<bool> SaveChangesAsync()
         {
             return (await _context.SaveChangesAsync()) > 0;
         }
-        
+
         // Event
         public async Task<MyEvent> GetEventById(int eventId, bool speaker)
         {
@@ -49,7 +51,8 @@ namespace NilDevStudio.Repository
                         .ThenInclude(s => s.Speaker);
                 }
 
-                query = query.OrderByDescending(c => c.DataEvent)
+                query = query.AsNoTracking()
+                    .OrderByDescending(c => c.DataEvent)
                     .Where(c => c.Id == eventId);
 
                 return await query.FirstOrDefaultAsync();
@@ -68,7 +71,8 @@ namespace NilDevStudio.Repository
                         .ThenInclude(s => s.Speaker);
                 }
 
-                query = query.OrderByDescending(c => c.DataEvent);
+                query = query.AsNoTracking()
+                    .OrderByDescending(c => c.DataEvent);
 
                 return await query.ToArrayAsync();
         }
@@ -86,7 +90,8 @@ namespace NilDevStudio.Repository
                         .ThenInclude(s => s.Speaker);
                 }
 
-                query = query.OrderByDescending(c => c.DataEvent)
+                query = query.AsNoTracking()
+                    .OrderByDescending(c => c.DataEvent)
                     .Where(c => c.Theme.ToLower().Contains(theme.ToLower()));
 
                 return await query.ToArrayAsync();
@@ -107,7 +112,8 @@ namespace NilDevStudio.Repository
                         .ThenInclude(e => e.Event);
                 }
 
-                query = query.OrderBy(s => s.Name)
+                query = query.AsNoTracking()
+                    .OrderBy(s => s.Name)
                     .Where(s => s.Id == speakerId);
 
                 return await query.FirstOrDefaultAsync();
@@ -124,7 +130,8 @@ namespace NilDevStudio.Repository
                         .ThenInclude(e => e.Event);
                 }
 
-                query = query.Where(s => s.Name.ToLower().Contains(name.ToLower()));
+                query = query.AsNoTracking()
+                    .Where(s => s.Name.ToLower().Contains(name.ToLower()));
 
                 return await query.ToArrayAsync();
         }

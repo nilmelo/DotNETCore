@@ -40,6 +40,8 @@ namespace NilDevStudio.Repository.Migrations
 
                     b.Property<int>("EventId");
 
+                    b.Property<int?>("MyEventId");
+
                     b.Property<string>("Name");
 
                     b.Property<decimal>("Price");
@@ -48,7 +50,7 @@ namespace NilDevStudio.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("MyEventId");
 
                     b.ToTable("Lots");
                 });
@@ -84,6 +86,8 @@ namespace NilDevStudio.Repository.Migrations
 
                     b.Property<int?>("EventId");
 
+                    b.Property<int?>("MyEventId");
+
                     b.Property<string>("Name");
 
                     b.Property<int?>("SpeakerId");
@@ -92,7 +96,7 @@ namespace NilDevStudio.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("MyEventId");
 
                     b.HasIndex("SpeakerId");
 
@@ -134,19 +138,18 @@ namespace NilDevStudio.Repository.Migrations
 
             modelBuilder.Entity("NilDevStudio.Domain.Lot", b =>
                 {
-                    b.HasOne("NilDevStudio.Domain.MyEvent", "Event")
+                    b.HasOne("NilDevStudio.Domain.MyEvent")
                         .WithMany("Lots")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("MyEventId");
                 });
 
             modelBuilder.Entity("NilDevStudio.Domain.SocialNetwork", b =>
                 {
-                    b.HasOne("NilDevStudio.Domain.MyEvent", "Event")
+                    b.HasOne("NilDevStudio.Domain.MyEvent")
                         .WithMany("SocialNetworks")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("MyEventId");
 
-                    b.HasOne("NilDevStudio.Domain.Speaker", "Speaker")
+                    b.HasOne("NilDevStudio.Domain.Speaker")
                         .WithMany("SocialNetworks")
                         .HasForeignKey("SpeakerId");
                 });

@@ -54,17 +54,18 @@ namespace NilDevStudio.Repository.Migrations
                     DateStart = table.Column<DateTime>(nullable: true),
                     DateEnd = table.Column<DateTime>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
-                    EventId = table.Column<int>(nullable: false)
+                    EventId = table.Column<int>(nullable: false),
+                    MyEventId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lots_MyEvents_EventId",
-                        column: x => x.EventId,
+                        name: "FK_Lots_MyEvents_MyEventId",
+                        column: x => x.MyEventId,
                         principalTable: "MyEvents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,14 +101,15 @@ namespace NilDevStudio.Repository.Migrations
                     Name = table.Column<string>(nullable: true),
                     URL = table.Column<string>(nullable: true),
                     EventId = table.Column<int>(nullable: true),
-                    SpeakerId = table.Column<int>(nullable: true)
+                    SpeakerId = table.Column<int>(nullable: true),
+                    MyEventId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SocialNetworks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SocialNetworks_MyEvents_EventId",
-                        column: x => x.EventId,
+                        name: "FK_SocialNetworks_MyEvents_MyEventId",
+                        column: x => x.MyEventId,
                         principalTable: "MyEvents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -125,14 +127,14 @@ namespace NilDevStudio.Repository.Migrations
                 column: "SpeakerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lots_EventId",
+                name: "IX_Lots_MyEventId",
                 table: "Lots",
-                column: "EventId");
+                column: "MyEventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SocialNetworks_EventId",
+                name: "IX_SocialNetworks_MyEventId",
                 table: "SocialNetworks",
-                column: "EventId");
+                column: "MyEventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SocialNetworks_SpeakerId",
