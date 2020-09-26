@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { MyEventService } from '../_services/MyEvent.service';
 // older Angular versions
 import {CommonModule} from '@angular/common';
+import { MyEvent } from '../_models/MyEvent';
+
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.css']
 })
-export class EventsComponent implements OnInit 
+export class EventsComponent implements OnInit
 {
   _filterList: string;
   get filterList(): string
@@ -21,13 +23,13 @@ export class EventsComponent implements OnInit
     this.FilteredEvents = this.filterList ? this.FilterEvents(this.filterList) : this.events;
   }
 
-  FilteredEvents: any = [];
-  events: any = [];
+  FilteredEvents: MyEvent[];
+  events: MyEvent[];
   imageWidth = 50;
   imageMargin = 2;
   imageToggle = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private myEventService: MyEventService) { }
 
   ngOnInit()
   {
@@ -39,7 +41,7 @@ export class EventsComponent implements OnInit
     this.imageToggle = !this.imageToggle;
   }
 
-  FilterEvents(filterBy: string): any
+  FilterEvents(filterBy: string): MyEvent[]
   {
     filterBy = filterBy.toLocaleLowerCase();
     return this.events.filter(
@@ -49,9 +51,12 @@ export class EventsComponent implements OnInit
 
   getEvents()
   {
-    this.http.get('http://localhost:5000/api/values').subscribe(
-      response => {
-        this.events = response;
+    this.myEventService.getAllMyEvent().subscribe(
+      (_myEvents: MyEvent[]) => {
+        this.events = _myEvents;
+        this.FilteredEvents = this.events;
+
+        console.log(_myEvents);
       },
       error => {
         console.log(error);
