@@ -2,9 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MyEventService } from '../services/MyEvent.service';
 import { MyEvent } from '../models/MyEvent';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-// older Angular versions
-import {CommonModule} from '@angular/common';
-
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -14,18 +12,20 @@ import {CommonModule} from '@angular/common';
 })
 export class EventsComponent implements OnInit
 {
-  FilteredEvents: any[];
+  FilteredEvents: MyEvent[];
   events: MyEvent[];
   imageWidth = 50;
   imageMargin = 2;
   imageToggle = false;
   modalRef: BsModalRef;
+  registerForm: FormGroup;
 
   _filterList: string;
 
   constructor(
         private myEventService: MyEventService
       , private modalService: BsModalService
+      , private fb: FormBuilder
     ) { }
 
   openModal(template: TemplateRef<any>)
@@ -44,6 +44,7 @@ export class EventsComponent implements OnInit
 
   ngOnInit()
   {
+    this.validation();
     this.getEvents();
   }
 
@@ -58,6 +59,24 @@ export class EventsComponent implements OnInit
     return this.events.filter(
       event => event.theme.toLocaleLowerCase().indexOf(filterBy) !== -1
     );
+  }
+
+  validation()
+  {
+      this.registerForm = this.fb.group({
+          theme: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+          local: ['', Validators.required],
+          dateEvent: ['', Validators.required],
+          imageURL: ['', Validators.required],
+          quantPeople: ['', [Validators.required, Validators.max(2000)]],
+          telephone: ['', Validators.required],
+          email: ['', [Validators.required, Validators.email]]
+    });
+  }
+
+  saveChanges()
+  {
+
   }
 
   getEvents()
