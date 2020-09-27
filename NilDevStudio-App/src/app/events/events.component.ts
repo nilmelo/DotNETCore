@@ -2,8 +2,12 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MyEventService } from '../services/MyEvent.service';
 import { MyEvent } from '../models/MyEvent';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
 
+defineLocale('pt-br', ptBrLocale);
 
 @Component({
   selector: 'app-events',
@@ -26,7 +30,8 @@ export class EventsComponent implements OnInit
         private myEventService: MyEventService
       , private modalService: BsModalService
       , private fb: FormBuilder
-    ) { }
+      , private localeService: BsLocaleService
+    ) { this.localeService.use('pt-br'); }
 
   openModal(template: TemplateRef<any>)
   {
