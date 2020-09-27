@@ -14,7 +14,7 @@ namespace NilDevStudio.Repository.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Local = table.Column<string>(nullable: true),
-                    DataEvent = table.Column<DateTime>(nullable: false),
+                    DateEvent = table.Column<DateTime>(nullable: true),
                     Theme = table.Column<string>(nullable: true),
                     QuantPeople = table.Column<int>(nullable: false),
                     ImageURL = table.Column<string>(nullable: true),
@@ -73,17 +73,18 @@ namespace NilDevStudio.Repository.Migrations
                 columns: table => new
                 {
                     SpeakerId = table.Column<int>(nullable: false),
-                    EventId = table.Column<int>(nullable: false)
+                    EventId = table.Column<int>(nullable: false),
+                    MyEventId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EventSpeakers", x => new { x.EventId, x.SpeakerId });
                     table.ForeignKey(
-                        name: "FK_EventSpeakers_MyEvents_EventId",
-                        column: x => x.EventId,
+                        name: "FK_EventSpeakers_MyEvents_MyEventId",
+                        column: x => x.MyEventId,
                         principalTable: "MyEvents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_EventSpeakers_Speakers_SpeakerId",
                         column: x => x.SpeakerId,
@@ -120,6 +121,11 @@ namespace NilDevStudio.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventSpeakers_MyEventId",
+                table: "EventSpeakers",
+                column: "MyEventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventSpeakers_SpeakerId",

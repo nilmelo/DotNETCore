@@ -38,7 +38,7 @@ namespace NilDevStudio.Repository
         }
 
         // Event
-        public async Task<MyEvent> GetEventById(int eventId, bool speaker)
+        public async Task<MyEvent> GetEventById(int myEventId, bool speaker)
         {
             IQueryable<MyEvent> query = _context.MyEvents
                 .Include(c => c.Lots)
@@ -52,8 +52,8 @@ namespace NilDevStudio.Repository
                 }
 
                 query = query.AsNoTracking()
-                    .OrderByDescending(c => c.DataEvent)
-                    .Where(c => c.Id == eventId);
+                    .OrderByDescending(c => c.DateEvent)
+                    .Where(c => c.Id == myEventId);
 
                 return await query.FirstOrDefaultAsync();
         }
@@ -72,7 +72,7 @@ namespace NilDevStudio.Repository
                 }
 
                 query = query.AsNoTracking()
-                    .OrderByDescending(c => c.DataEvent);
+                    .OrderByDescending(c => c.DateEvent);
 
                 return await query.ToArrayAsync();
         }
@@ -91,7 +91,7 @@ namespace NilDevStudio.Repository
                 }
 
                 query = query.AsNoTracking()
-                    .OrderByDescending(c => c.DataEvent)
+                    .OrderByDescending(c => c.DateEvent)
                     .Where(c => c.Theme.ToLower().Contains(theme.ToLower()));
 
                 return await query.ToArrayAsync();
@@ -109,7 +109,7 @@ namespace NilDevStudio.Repository
                 {
                     query = query
                         .Include(es => es.EventSpeaker)
-                        .ThenInclude(e => e.Event);
+                        .ThenInclude(e => e.MyEvent);
                 }
 
                 query = query.AsNoTracking()
@@ -127,7 +127,7 @@ namespace NilDevStudio.Repository
                 {
                     query = query
                         .Include(es => es.EventSpeaker)
-                        .ThenInclude(e => e.Event);
+                        .ThenInclude(e => e.MyEvent);
                 }
 
                 query = query.AsNoTracking()

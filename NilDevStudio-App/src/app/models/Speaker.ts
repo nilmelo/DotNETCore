@@ -10,5 +10,5 @@ export interface Speaker
     telephone: string;
     email: string;
     socialNetworks: SocialNetwork[];
-    myEvents: MyEvent[];
+    EventSpeakers: MyEvent[];
 }

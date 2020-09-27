@@ -9,7 +9,7 @@ using NilDevStudio.Repository;
 namespace NilDevStudio.Repository.Migrations
 {
     [DbContext(typeof(NilDevContext))]
-    [Migration("20200925225719_init")]
+    [Migration("20200927004714_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,11 @@ namespace NilDevStudio.Repository.Migrations
 
                     b.Property<int>("SpeakerId");
 
+                    b.Property<int?>("MyEventId");
+
                     b.HasKey("EventId", "SpeakerId");
+
+                    b.HasIndex("MyEventId");
 
                     b.HasIndex("SpeakerId");
 
@@ -62,7 +66,7 @@ namespace NilDevStudio.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DataEvent");
+                    b.Property<DateTime?>("DateEvent");
 
                     b.Property<string>("Email");
 
@@ -127,10 +131,9 @@ namespace NilDevStudio.Repository.Migrations
 
             modelBuilder.Entity("NilDevStudio.Domain.EventSpeaker", b =>
                 {
-                    b.HasOne("NilDevStudio.Domain.MyEvent", "Event")
+                    b.HasOne("NilDevStudio.Domain.MyEvent", "MyEvent")
                         .WithMany("EventSpeaker")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("MyEventId");
 
                     b.HasOne("NilDevStudio.Domain.Speaker", "Speaker")
                         .WithMany("EventSpeaker")

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MyEvent } from '../_models/MyEvent';
+import { MyEvent } from '../models/MyEvent';
 
 // Decorator
 @Injectable({
@@ -9,7 +9,7 @@ import { MyEvent } from '../_models/MyEvent';
 })
 export class MyEventService
 {
-    baseURL = 'http://localhost:5000/api/evento';
+    baseURL = 'http://localhost:5000/api/myEvent';
 
     constructor(private http: HttpClient)
     {

@@ -13,55 +13,75 @@
             <th>
                 <button class="btn btn-outline-primary"
                 (click)="ToggleImage()">
-                    <i class="{{ imageToggle ? 'fa fa-eye-slash' : 'fa fa-eye'  }}"></i>
-                    Image
+                <i class="{{ imageToggle ? 'fa fa-eye-slash' : 'fa fa-eye'  }}"></i>
+                Image
+            </button>
+        </th>
+        <th>#</th>
+        <th>Theme</th>
+        <th>Local</th>
+        <th>Date</th>
+        <th>Qtd People</th>
+        <th>Lot</th>
+        <th>Options</th>
+    </tr>
+</thead>
+<tbody *ngIf="events && events?.length > 0">
+    <tr *ngFor= "let event of FilteredEvents">
+        <td>
+            <img *ngIf="imageToggle"
+            src="http://localhost:5000/img{{event.imageURL}}"
+            [style.width.px]="imageWidth"
+            [style.margin.px]="imageMargin">
+        </td>
+        <td>{{event.id}}</td>
+        <td>{{event.theme}}</td>
+        <td>{{event.local}}</td>
+        <td>{{event.dateEvent | DateTimeFormatPipe}}</td>
+        <td>{{event.quantPeople}}</td>
+        <td>
+            <div *ngIf="!event.lots.length">
+                Uninformed
+
+            </div>
+            <div *ngIf="event.lots.length">
+                {{ event.lots[0].name | uppercase }}
+
+            </div>
+        </td>
+        <td>
+            <div class="btn-group">
+                <button class="btn btn-sm btn-primary"
+                        tooltip="Edit" (Click)="openModal(template)">
+                    <i class="fa fa-edit"></i>
                 </button>
-            </th>
-            <th>#</th>
-            <th>Theme</th>
-            <th>Local</th>
-            <th>Date</th>
-            <th>Qtd People</th>
-            <th>Lot</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <tbody *ngIf="events && events.length">
-        <tr *ngFor= "let event of FilteredEvents">
-            <td>
-                <img *ngIf="imageToggle"
-                src="http://localhost:5000/img{{event.imageURL}}"
-                [style.width.px]="imageWidth"
-                [style.margin.px]="imageMargin">
-            </td>
-            <td>{{event.id}}</td>
-            <td>{{event.theme}}</td>
-            <td>{{event.local}}</td>
-            <td>{{event.dataEvent}}</td>
-            <td>{{event.quantPeople}}</td>
-            <td>
-                <div *ngIf="!event.lots.length">
-                    Uninformed
-
-                </div>
-                <div *ngIf="event.lots.length">
-                    {{ event.lots[0].name | uppercase }}
-
-                </div>
-            </td>
-            <td>
-                <button class="btn btn-success"></button>
-                <button class="btn btn-danger"></button>
-            </td>
-        </tr>
-    </tbody>
-    <tfoot *ngIf="!events.length">
-        <tr>
-            <td colspan="7" class="text-center">
-                <h3>
-                    Nenhum evento encontrado!
-                </h3>
-            </td>
-        </tr>
-    </tfoot>
+                <button class="btn btn-sm btn-danger" tooltip="Exclude">
+                    <i class="fa fa-eraser"></i>
+                </button>
+            </div>
+        </td>
+    </tr>
+</tbody>
+<tfoot *ngIf="!events.length">
+    <tr>
+        <td colspan="7" class="text-center">
+            <h3>
+                Nenhum evento encontrado!
+            </h3>
+        </td>
+    </tr>
+</tfoot>
 </table>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Modal</h4>
+        <button type="button" class="close pull-right"
+        aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    This is a modal.
+</div>
+</ng-template>

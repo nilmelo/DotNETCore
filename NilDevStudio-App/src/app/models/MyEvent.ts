@@ -6,7 +6,7 @@ export interface MyEvent
 {
     id: number;
     local: string;
-    dataEvent: Date;
+    dateEvent: Date;
     theme: string;
     quantPeople: number;
     imageURL: string;
@@ -14,5 +14,5 @@ export interface MyEvent
     email: string;
     lots: Lot[];
     socialNetworks: SocialNetwork[];
-    speakers: Speaker[];
+    EventSpeakers: Speaker[];
 }
