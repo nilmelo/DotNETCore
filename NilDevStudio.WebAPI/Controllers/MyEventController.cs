@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NilDevStudio.Domain;
 using NilDevStudio.Repository;
+using AutoMapper;
+using System.Collections.Generic;
+using NilDevStudio.WebAPI.DTO;
 
 namespace NilDevStudio.WebAPI.Controllers
 {
@@ -11,9 +14,11 @@ namespace NilDevStudio.WebAPI.Controllers
     public class MyEventController : ControllerBase
     {
         private readonly INilDevRepository _repository;
+        private readonly IMapper _mapper;
 
-        public MyEventController(INilDevRepository repository)
+        public MyEventController(INilDevRepository repository, IMapper mapper)
         {
+            _mapper = mapper;
             _repository = repository;
         }
 
@@ -22,7 +27,8 @@ namespace NilDevStudio.WebAPI.Controllers
         {
             try
             {
-                var results = await _repository.GetAllEvent(true);
+                var myEvents = await _repository.GetAllEvent(true);
+				var results = _mapper.Map<IEnumerable<MyEventDTO>>(myEvents);
                 return Ok(results);
             }
             catch (System.Exception)
@@ -31,12 +37,13 @@ namespace NilDevStudio.WebAPI.Controllers
             }
         }
 
-        [HttpGet("{EventId}")]
-        public async Task<IActionResult> Get(int eventId)
+        [HttpGet("{MyEventId}")]
+        public async Task<IActionResult> Get(int MyEventId)
         {
             try
             {
-                var results = await _repository.GetEventById(eventId, true);
+                var myEvent = await _repository.GetEventById(MyEventId, true);
+				var results = _mapper.Map<MyEventDTO>(myEvent);
                 return Ok(results);
             }
             catch (System.Exception)
@@ -79,12 +86,12 @@ namespace NilDevStudio.WebAPI.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(int eventId, MyEvent model)
+        [HttpPut("{MyEventId}")]
+        public async Task<IActionResult> Put(int MyEventId, MyEvent model)
         {
             try
             {
-                var myEvent = await _repository.GetEventById(eventId, false);
+                var myEvent = await _repository.GetEventById(MyEventId, false);
 
                 if(myEvent == null) return NotFound();
 
@@ -104,12 +111,12 @@ namespace NilDevStudio.WebAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int eventId)
+        [HttpDelete("{MyEventId}")]
+        public async Task<IActionResult> Delete(int MyEventId)
         {
             try
             {
-                var myEvent = await _repository.GetEventById(eventId, false);
+                var myEvent = await _repository.GetEventById(MyEventId, false);
 
                 if(myEvent == null) return NotFound();
 

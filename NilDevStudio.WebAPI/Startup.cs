@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NilDevStudio.Repository;
+using AutoMapper;
 
 namespace NilDevStudio.WebAPI
 {
@@ -30,6 +31,9 @@ namespace NilDevStudio.WebAPI
             services.AddDbContext<NilDevContext>(
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<INilDevRepository, NilDevRepository>();
+
+			services.AddAutoMapper();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
         }

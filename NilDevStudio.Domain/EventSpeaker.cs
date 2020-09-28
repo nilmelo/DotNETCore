@@ -4,7 +4,7 @@ namespace NilDevStudio.Domain
     {
         public int SpeakerId { get; set; }
         public Speaker Speaker { get; set; }
-        public int EventId { get; set; }
+        public int MyEventId { get; set; }
         public MyEvent MyEvent { get; set; }
     }
 }

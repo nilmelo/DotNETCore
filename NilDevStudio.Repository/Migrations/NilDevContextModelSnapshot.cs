@@ -18,15 +18,11 @@ namespace NilDevStudio.Repository.Migrations
 
             modelBuilder.Entity("NilDevStudio.Domain.EventSpeaker", b =>
                 {
-                    b.Property<int>("EventId");
+                    b.Property<int>("MyEventId");
 
                     b.Property<int>("SpeakerId");
 
-                    b.Property<int?>("MyEventId");
-
-                    b.HasKey("EventId", "SpeakerId");
-
-                    b.HasIndex("MyEventId");
+                    b.HasKey("MyEventId", "SpeakerId");
 
                     b.HasIndex("SpeakerId");
 
@@ -42,9 +38,7 @@ namespace NilDevStudio.Repository.Migrations
 
                     b.Property<DateTime?>("DateStart");
 
-                    b.Property<int>("EventId");
-
-                    b.Property<int?>("MyEventId");
+                    b.Property<int>("MyEventId");
 
                     b.Property<string>("Name");
 
@@ -64,7 +58,7 @@ namespace NilDevStudio.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime?>("DateEvent");
+                    b.Property<DateTime>("DateEvent");
 
                     b.Property<string>("Email");
 
@@ -87,8 +81,6 @@ namespace NilDevStudio.Repository.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("EventId");
 
                     b.Property<int?>("MyEventId");
 
@@ -130,11 +122,12 @@ namespace NilDevStudio.Repository.Migrations
             modelBuilder.Entity("NilDevStudio.Domain.EventSpeaker", b =>
                 {
                     b.HasOne("NilDevStudio.Domain.MyEvent", "MyEvent")
-                        .WithMany("EventSpeaker")
-                        .HasForeignKey("MyEventId");
+                        .WithMany("EventSpeakers")
+                        .HasForeignKey("MyEventId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("NilDevStudio.Domain.Speaker", "Speaker")
-                        .WithMany("EventSpeaker")
+                        .WithMany("EventSpeakers")
                         .HasForeignKey("SpeakerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -143,7 +136,8 @@ namespace NilDevStudio.Repository.Migrations
                 {
                     b.HasOne("NilDevStudio.Domain.MyEvent")
                         .WithMany("Lots")
-                        .HasForeignKey("MyEventId");
+                        .HasForeignKey("MyEventId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("NilDevStudio.Domain.SocialNetwork", b =>

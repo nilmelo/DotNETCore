@@ -14,7 +14,7 @@ namespace NilDevStudio.Repository.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Local = table.Column<string>(nullable: true),
-                    DateEvent = table.Column<DateTime>(nullable: true),
+                    DateEvent = table.Column<DateTime>(nullable: false),
                     Theme = table.Column<string>(nullable: true),
                     QuantPeople = table.Column<int>(nullable: false),
                     ImageURL = table.Column<string>(nullable: true),
@@ -54,8 +54,7 @@ namespace NilDevStudio.Repository.Migrations
                     DateStart = table.Column<DateTime>(nullable: true),
                     DateEnd = table.Column<DateTime>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
-                    EventId = table.Column<int>(nullable: false),
-                    MyEventId = table.Column<int>(nullable: true)
+                    MyEventId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,7 +64,7 @@ namespace NilDevStudio.Repository.Migrations
                         column: x => x.MyEventId,
                         principalTable: "MyEvents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,18 +72,17 @@ namespace NilDevStudio.Repository.Migrations
                 columns: table => new
                 {
                     SpeakerId = table.Column<int>(nullable: false),
-                    EventId = table.Column<int>(nullable: false),
-                    MyEventId = table.Column<int>(nullable: true)
+                    MyEventId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventSpeakers", x => new { x.EventId, x.SpeakerId });
+                    table.PrimaryKey("PK_EventSpeakers", x => new { x.MyEventId, x.SpeakerId });
                     table.ForeignKey(
                         name: "FK_EventSpeakers_MyEvents_MyEventId",
                         column: x => x.MyEventId,
                         principalTable: "MyEvents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EventSpeakers_Speakers_SpeakerId",
                         column: x => x.SpeakerId,
@@ -101,9 +99,8 @@ namespace NilDevStudio.Repository.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     URL = table.Column<string>(nullable: true),
-                    EventId = table.Column<int>(nullable: true),
-                    SpeakerId = table.Column<int>(nullable: true),
-                    MyEventId = table.Column<int>(nullable: true)
+                    MyEventId = table.Column<int>(nullable: true),
+                    SpeakerId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -121,11 +118,6 @@ namespace NilDevStudio.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventSpeakers_MyEventId",
-                table: "EventSpeakers",
-                column: "MyEventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventSpeakers_SpeakerId",

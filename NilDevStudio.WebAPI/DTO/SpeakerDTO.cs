@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace NilDevStudio.Domain
+namespace NilDevStudio.WebAPI.DTO
 {
-    public class Speaker
+    public class SpeakerDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,7 +10,7 @@ namespace NilDevStudio.Domain
         public string ImageURL { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
-        public List<SocialNetwork> SocialNetworks { get; set; }
-        public List<EventSpeaker> EventSpeakers { get; set; }
+        public List<SocialNetworkDTO> SocialNetworks { get; set; }
+        public List<MyEventDTO> MyEvents { get; set; }
     }
 }

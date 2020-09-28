@@ -38,12 +38,12 @@ export class MyEventService
 
 	putMyEvent(myEvent: MyEvent)
 	{
-		return this.http.put('${this.baseURL}/${myEvent.id}', myEvent);
+		return this.http.put(this.baseURL+'/'+ myEvent.id, myEvent);
     }
 
     deleteMyEvent(id: number)
     {
-        return this.http.delete('${this.baseURL}/${id}');
+        return this.http.delete(this.baseURL+'/'+id);
     }
 
 }

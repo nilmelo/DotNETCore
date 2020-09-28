@@ -10,7 +10,7 @@ namespace NilDevStudio.Domain
         public DateTime? DateStart { get; set; }
         public DateTime? DateEnd { get; set; }
         public int Quantity { get; set; }
-        public int EventId { get; set; }
+        public int MyEventId { get; set; }
         public MyEvent MyEvent{ get; }
     }
 }

@@ -11,8 +11,6 @@ namespace NilDevStudio.Repository
         public NilDevRepository(NilDevContext context)
         {
             _context = context;
-
-            //
             //_context.ChangeTracker.QueryTrackBehaviour = QueryTrackBehaviour.NoTracking;
         }
 
@@ -38,55 +36,35 @@ namespace NilDevStudio.Repository
         }
 
         // Event
-        public async Task<MyEvent> GetEventById(int myEventId, bool speaker)
+		public async Task<MyEvent[]> GetAllEvent(bool speakers = false)
         {
             IQueryable<MyEvent> query = _context.MyEvents
                 .Include(c => c.Lots)
                 .Include(c => c.SocialNetworks);
 
-                if(speaker)
+                if(speakers)
                 {
                     query = query
-                        .Include(es => es.EventSpeaker)
+                        .Include(es => es.EventSpeakers)
                         .ThenInclude(s => s.Speaker);
                 }
 
                 query = query.AsNoTracking()
-                    .OrderByDescending(c => c.DateEvent)
-                    .Where(c => c.Id == myEventId);
-
-                return await query.FirstOrDefaultAsync();
-        }
-
-        public async Task<MyEvent[]> GetAllEvent(bool speaker = false)
-        {
-            IQueryable<MyEvent> query = _context.MyEvents
-                .Include(c => c.Lots)
-                .Include(c => c.SocialNetworks);
-
-                if(speaker)
-                {
-                    query = query
-                        .Include(es => es.EventSpeaker)
-                        .ThenInclude(s => s.Speaker);
-                }
-
-                query = query.AsNoTracking()
-                    .OrderByDescending(c => c.DateEvent);
+                    .OrderBy(c => c.Id);
 
                 return await query.ToArrayAsync();
         }
 
-        public async Task<MyEvent[]> GetAllEventByTheme(string theme, bool speaker)
+		public async Task<MyEvent[]> GetAllEventByTheme(string theme, bool speakers)
         {
             IQueryable<MyEvent> query = _context.MyEvents
                 .Include(c => c.Lots)
                 .Include(c => c.SocialNetworks);
 
-                if(speaker)
+                if(speakers)
                 {
                     query = query
-                        .Include(es => es.EventSpeaker)
+                        .Include(es => es.EventSpeakers)
                         .ThenInclude(s => s.Speaker);
                 }
 
@@ -97,10 +75,30 @@ namespace NilDevStudio.Repository
                 return await query.ToArrayAsync();
         }
 
+
+        public async Task<MyEvent> GetEventById(int MyEventId, bool speakers)
+        {
+            IQueryable<MyEvent> query = _context.MyEvents
+                .Include(c => c.Lots)
+                .Include(c => c.SocialNetworks);
+
+                if(speakers)
+                {
+                    query = query
+                        .Include(es => es.EventSpeakers)
+                        .ThenInclude(s => s.Speaker);
+                }
+
+                query = query
+					.AsNoTracking()
+                    .OrderBy(c => c.Id)
+                    .Where(c => c.Id == MyEventId);
+
+                return await query.FirstOrDefaultAsync();
+        }
+
         // Speaker
-
-
-        public async Task<Speaker> GetSpeaker(int speakerId, bool events = false)
+        public async Task<Speaker> GetSpeaker(int SpeakerId, bool events = false)
         {
             IQueryable<Speaker> query = _context.Speakers
                 .Include(c => c.SocialNetworks);
@@ -108,13 +106,13 @@ namespace NilDevStudio.Repository
                 if(events)
                 {
                     query = query
-                        .Include(es => es.EventSpeaker)
+                        .Include(es => es.EventSpeakers)
                         .ThenInclude(e => e.MyEvent);
                 }
 
                 query = query.AsNoTracking()
                     .OrderBy(s => s.Name)
-                    .Where(s => s.Id == speakerId);
+                    .Where(s => s.Id == SpeakerId);
 
                 return await query.FirstOrDefaultAsync();
         }
@@ -126,7 +124,7 @@ namespace NilDevStudio.Repository
                 if(events)
                 {
                     query = query
-                        .Include(es => es.EventSpeaker)
+                        .Include(es => es.EventSpeakers)
                         .ThenInclude(e => e.MyEvent);
                 }
 
