@@ -22,9 +22,9 @@
       "rxjs/Rx"
     ],
     "import-spacing": true,
-    "indent": {
+    "indent":{
       "options": [
-        "spaces", 4
+        "tabs",4
       ]
     },
     "max-classes-per-file": false,

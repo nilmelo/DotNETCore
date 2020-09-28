@@ -1,99 +1,163 @@
-import { Component, OnInit, TemplateRef } from '@angular/core'
-import { MyEventService } from '../services/MyEvent.service'
-import { MyEvent } from '../models/MyEvent'
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
-import { FormGroup, Validators, FormBuilder } from '@angular/forms'
-import { BsLocaleService } from 'ngx-bootstrap/datepicker'
-import { defineLocale } from 'ngx-bootstrap/chronos'
-import { ptBrLocale } from 'ngx-bootstrap/locale'
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { MyEventService } from '../services/MyEvent.service';
+import { MyEvent } from '../models/MyEvent';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
 
-defineLocale('pt-br', ptBrLocale)
+defineLocale('pt-br', ptBrLocale);
 
-@Component({
-    selector: 'app-events',
-    templateUrl: './events.component.html',
-    styleUrls: ['./events.component.css'],
+@Component({selector: 'app-events',
+	templateUrl: './events.component.html',
+	styleUrls: ['./events.component.css']
 })
-export class EventsComponent implements OnInit {
-    FilteredEvents: MyEvent[]
-    events: MyEvent[]
-    imageWidth = 50
-    imageMargin = 2
-    imageToggle = false
-    registerForm: FormGroup
+export class EventsComponent implements OnInit
+{
+	FilteredEvents: MyEvent[];
+	events: MyEvent[];
+	myEvent: MyEvent;
+	imageWidth = 50;
+	imageMargin = 2;
+	imageToggle = false;
+	registerForm: FormGroup;
+	saveMod = 'post';
+	bodyDeleteEvent = '';
 
-    _filterList: string
+	_filterList: string;
 
-    constructor(
-        private myEventService: MyEventService,
-        private modalService: BsModalService,
-        private fb: FormBuilder,
-        private localeService: BsLocaleService,
-        ) {
-            this.localeService.use('pt-br')
-        }
+	constructor(
+		private myEventService: MyEventService
+		, private modalService: BsModalService
+		, private fb: FormBuilder
+		, private localeService: BsLocaleService
+		) { this.localeService.use('pt-br'); }
 
-        openModal(template: any) {
-            template.show()
-        }
-        get filterList(): string {
-            return this._filterList
-        }
-        set filterList(value: string) {
-            this._filterList = value
-            this.FilteredEvents = this.filterList
-            ? this.FilterEvents(this.filterList)
-            : this.events
-        }
+	editEvent(myEvent: MyEvent, template: any)
+	{
+		this.saveMod = 'put';
+		this.openModal(template);
+		this.myEvent = myEvent;
+		this.registerForm.patchValue(myEvent);
+	}
 
-        ngOnInit() {
-            this.validation()
-            this.getEvents()
-        }
+	newEvent(template: any)
+	{
+		this.saveMod = 'post';
+		this.openModal(template);
+	}
 
-        ToggleImage() {
-            this.imageToggle = !this.imageToggle
-        }
+	openModal(template: any)
+	{
+		this.registerForm.reset();
+		template.show();
+	}
+	get filterList(): string
+	{
+		return this._filterList;
+	}
+	set filterList(value: string)
+	{
+		this._filterList = value;
+		this.FilteredEvents = this.filterList ? this.FilterEvents(this.filterList) : this.events;
+	}
 
-        FilterEvents(filterBy: string): MyEvent[] {
-            filterBy = filterBy.toLocaleLowerCase()
-            return this.events.filter(
-                (event) => event.theme.toLocaleLowerCase().indexOf(filterBy) !== -1,
-                )
-            }
+	ngOnInit()
+	{
+		this.validation();
+		this.getEvents();
+	}
 
-            validation() {
-                this.registerForm = this.fb.group({
-                    theme: [
-                        '',
-                        [
-                            Validators.required,
-                            Validators.minLength(4),
-                            Validators.maxLength(50),
-                        ],
-                    ],
-                    local: ['', Validators.required],
-                    dateEvent: ['', Validators.required],
-                    imageURL: ['', Validators.required],
-                    quantPeople: ['', [Validators.required, Validators.max(2000)]],
-                    telephone: ['', Validators.required],
-                    email: ['', [Validators.required, Validators.email]],
-                })
-            }
+	ToggleImage()
+	{
+		this.imageToggle = !this.imageToggle;
+	}
 
-            saveChanges() {}
+	FilterEvents(filterBy: string): MyEvent[]
+	{
+		filterBy = filterBy.toLocaleLowerCase();
+		return this.events.filter(
+			event => event.theme.toLocaleLowerCase().indexOf(filterBy) !== -1
+			);
+	}
 
-            getEvents() {
-                this.myEventService.getAllMyEvent().subscribe(
-                    (_myEvents: MyEvent[]) => {
-                        this.events = _myEvents
-                        this.FilteredEvents = this.events
+	validation()
+	{
+		this.registerForm = this.fb.group({
+			theme: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+			local: ['', Validators.required],
+			dateEvent: ['', Validators.required],
+			imageURL: ['', Validators.required],
+			quantPeople: ['', [Validators.required, Validators.max(2000)]],
+			telephone: ['', Validators.required],
+			email: ['', [Validators.required, Validators.email]]
+		});
+	}
 
-                        console.log(_myEvents)
-                    },
-                    (error) => {
-                        console.log(error)
-                    },
-                    )
-                }
-            }
+	saveChanges(template: any)
+	{
+		if(this.registerForm.valid)
+		{
+			if(this.saveMod === 'post')
+			{
+				this.myEvent = Object.assign({}, this.registerForm.value);
+				this.myEventService.postMyEvent(this.myEvent).subscribe(
+					(newEvent: MyEvent) => {
+						console.log(newEvent);
+						template.hide();
+						this.getEvents();
+					}, error => {
+						console.log(error);
+					}
+				);
+			}
+			else
+			{
+				this.myEvent = Object.assign({id: this.myEvent.id}, this.registerForm.value);
+				this.myEventService.putMyEvent(this.myEvent).subscribe(
+					() => {
+						template.hide();
+						this.getEvents();
+					}, error => {
+						console.log(error);
+					}
+				);
+			}
+		}
+	}
+
+	getEvents()
+	{
+		this.myEventService.getAllMyEvent().subscribe(
+			(_myEvents: MyEvent[]) => {
+				this.events = _myEvents;
+				this.FilteredEvents = this.events;
+
+				console.log(_myEvents);
+			},
+			error => {
+				console.log(error);
+			}
+			);
+	}
+
+	excludeEvent(myEvent: MyEvent, template: any) {
+		this.openModal(template);
+		this.myEvent = myEvent;
+		this.bodyDeleteEvent = `Tem certeza que deseja excluir o Evento: ${myEvent.theme}, Código: ${myEvent.id}`;
+	}
+
+	confirmDelete(template: any)
+	{
+		this.myEventService.deleteMyEvent(this.myEvent.id).subscribe(
+			() => {
+				template.hide();
+				this.getEvents();
+			  }, error => {
+				console.log(error);
+			  }
+		);
+	}
+
+}

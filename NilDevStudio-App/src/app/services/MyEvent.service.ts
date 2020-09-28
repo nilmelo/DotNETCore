@@ -29,6 +29,21 @@ export class MyEventService
     getMyEventById(id: number): Observable<MyEvent>
     {
         return this.http.get<MyEvent>('${this.baseURL}/${id}');
+	}
+
+	postMyEvent(myEvent: MyEvent)
+	{
+		return this.http.post(this.baseURL, myEvent);
+	}
+
+	putMyEvent(myEvent: MyEvent)
+	{
+		return this.http.put('${this.baseURL}/${myEvent.id}', myEvent);
+    }
+
+    deleteMyEvent(id: number)
+    {
+        return this.http.delete('${this.baseURL}/${id}');
     }
 
 }
