@@ -6,6 +6,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { ToastrService } from 'ngx-toastr';
 
 defineLocale('pt-br', ptBrLocale);
 
@@ -32,6 +33,7 @@ export class EventsComponent implements OnInit
 		, private modalService: BsModalService
 		, private fb: FormBuilder
 		, private localeService: BsLocaleService
+		, private toastr: ToastrService
 		) { this.localeService.use('pt-br'); }
 
 	editEvent(myEvent: MyEvent, template: any)
@@ -107,6 +109,7 @@ export class EventsComponent implements OnInit
 						console.log(newEvent);
 						template.hide();
 						this.getEvents();
+						this.toastr.success('Successfully Inserted!');
 					}, error => {
 						console.log(error);
 					}
@@ -119,6 +122,7 @@ export class EventsComponent implements OnInit
 					() => {
 						template.hide();
 						this.getEvents();
+						this.toastr.success('Successfully Edited!');
 					}, error => {
 						console.log(error);
 					}
@@ -154,7 +158,9 @@ export class EventsComponent implements OnInit
 			() => {
 				template.hide();
 				this.getEvents();
+				this.toastr.success('Successfully Deleted!');
 			  }, error => {
+				this.toastr.error('Delete Error');
 				console.log(error);
 			  }
 		);

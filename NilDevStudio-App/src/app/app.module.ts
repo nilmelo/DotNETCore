@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import { MyEventService } from './services/MyEvent.service';
 
@@ -16,6 +16,7 @@ import { NavComponent } from './nav/nav.component';
 
 import { DateTimeFormatPipePipe } from './helper/DateTimeFormatPipe.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -35,7 +36,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ModalModule.forRoot(),
     TooltipModule.forRoot(),
     ReactiveFormsModule,
-    BrowserAnimationsModule
+	BrowserAnimationsModule,
+	ToastrModule.forRoot({
+		timeOut: 3000,
+		preventDuplicates: true
+	})
   ],
   providers: [],
   bootstrap: [AppComponent]
