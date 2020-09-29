@@ -31,6 +31,15 @@ export class MyEventService
         return this.http.get<MyEvent>('${this.baseURL}/${id}');
 	}
 
+	postUpload(file: File)
+	{
+		const fileToUpload = <File>file[0];
+		const formData = new FormData();
+		formData.append('file', fileToUpload, fileToUpload.name);
+
+		return this.http.post('${this.baseURL}/upload', formData);
+	}
+
 	postMyEvent(myEvent: MyEvent)
 	{
 		return this.http.post(this.baseURL, myEvent);

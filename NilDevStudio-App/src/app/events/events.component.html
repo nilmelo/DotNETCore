@@ -44,7 +44,7 @@
             <td>
                 <img
                 *ngIf="imageToggle"
-                src="http://localhost:5000/img{{ event.imageURL }}"
+                src="http://localhost:5000/resources/images/{{ event.imageURL }}"
                 [style.width.px]="imageWidth"
                 [style.margin.px]="imageMargin"
                 />
@@ -52,7 +52,7 @@
             <td>{{ event.id }}</td>
             <td>{{ event.theme }}</td>
             <td>{{ event.local }}</td>
-            <td>{{ event.dateEvent | DateTimeFormatPipe }}</td>
+            <td>{{ event.dateEvent }}</td>
             <td>{{ event.quantPeople }}</td>
             <td>
                 <div *ngIf="!event.lots.length">
@@ -255,19 +255,23 @@ aria-labelledby="dialog-sizes-name1"
 </div>
 
 <div class="form-group col-md-9">
-    <label>Image</label>
-
-    <input
-    type="text"
-    class="form-control"
-    [ngClass]="{
-        'is-invalid':
-        registerForm.get('imageURL').errors &&
-        registerForm.get('imageURL').touched
-    }"
-    formControlName="imageURL"
-    placeholder=""
-    />
+	<label>Image</label>
+	<table>
+		<tr>
+			<td>
+				<button class="btn btn-success" (click)="file.click()">
+					Upload Image
+					</button>
+					<input type="file" #file class="form-control"
+					[ngClass]="{ 'is-invalid':
+						registerForm.get('imageURL').errors &&
+						registerForm.get('imageURL').touched }"
+					(change)="onFileChange($event)"
+					formControlName="imageURL" placeholder=""
+					style="display:none"/>
+			</td>
+		</tr>
+	</table>
 
     <div
     *ngIf="
