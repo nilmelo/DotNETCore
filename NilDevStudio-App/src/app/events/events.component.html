@@ -1,3 +1,5 @@
+<app-title [title]="title"></app-title>
+
 <div class="d-flex">
     <div class="form-inline mr-auto">
         <div class="form-group mb-2">
@@ -191,7 +193,9 @@ aria-labelledby="dialog-sizes-name1"
     <input
     type="text"
     class="form-control"
-    bsDatepicker
+	bsDatepicker
+	value="{{dateEvent | DateTimeFormatPipe}}"
+	[(ngModel)]="dateEvent"
     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY hh:mm a' }"
     [ngClass]="{
         'is-invalid':

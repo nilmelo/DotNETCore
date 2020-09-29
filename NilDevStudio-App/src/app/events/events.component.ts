@@ -16,6 +16,9 @@ defineLocale('pt-br', ptBrLocale);
 })
 export class EventsComponent implements OnInit
 {
+	title = 'Events';
+
+	dateEvent: string;
 	FilteredEvents: MyEvent[];
 	events: MyEvent[];
 	myEvent: MyEvent;
@@ -29,7 +32,7 @@ export class EventsComponent implements OnInit
 	_filterList: string;
 
 	constructor(
-		private myEventService: MyEventService
+		  private myEventService: MyEventService
 		, private modalService: BsModalService
 		, private fb: FormBuilder
 		, private localeService: BsLocaleService
@@ -111,6 +114,7 @@ export class EventsComponent implements OnInit
 						this.getEvents();
 						this.toastr.success('Successfully Inserted!');
 					}, error => {
+						this.toastr.error('Insert Error');
 						console.log(error);
 					}
 				);
@@ -124,6 +128,7 @@ export class EventsComponent implements OnInit
 						this.getEvents();
 						this.toastr.success('Successfully Edited!');
 					}, error => {
+						this.toastr.error('Edit Error');
 						console.log(error);
 					}
 				);
@@ -137,10 +142,9 @@ export class EventsComponent implements OnInit
 			(_myEvents: MyEvent[]) => {
 				this.events = _myEvents;
 				this.FilteredEvents = this.events;
-
-				console.log(_myEvents);
 			},
 			error => {
+				this.toastr.error('Load Error');
 				console.log(error);
 			}
 			);
