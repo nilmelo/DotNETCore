@@ -28,7 +28,7 @@ namespace NilDevStudio.WebAPI.Controllers
             try
             {
                 var myEvents = await _repository.GetAllEvent(true);
-				var results = _mapper.Map<IEnumerable<MyEventDTO>>(myEvents);
+				var results = _mapper.Map<MyEventDTO[]>(myEvents);
                 return Ok(results);
             }
             catch (System.Exception)
@@ -57,7 +57,8 @@ namespace NilDevStudio.WebAPI.Controllers
         {
             try
             {
-                var results = await _repository.GetAllEventByTheme(theme, true);
+                var myEvents = await _repository.GetAllEventByTheme(theme, true);
+				var results = _mapper.Map<MyEventDTO[]>(myEvents);
                 return Ok(results);
             }
             catch (System.Exception)
@@ -67,15 +68,16 @@ namespace NilDevStudio.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(MyEvent model)
+        public async Task<IActionResult> Post(MyEventDTO model)
         {
             try
             {
-                _repository.Add(model);
+				var myEvent = _mapper.Map<MyEvent>(model);
+                _repository.Add(myEvent);
 
                 if(await _repository.SaveChangesAsync())
                 {
-                    return Created($"/api/myEvent/{model.Id}", model);
+                    return Created($"/api/myEvent/{model.Id}", _mapper.Map<MyEventDTO>(myEvent));
                 }
             }
             catch (System.Exception)
@@ -87,7 +89,7 @@ namespace NilDevStudio.WebAPI.Controllers
         }
 
         [HttpPut("{MyEventId}")]
-        public async Task<IActionResult> Put(int MyEventId, MyEvent model)
+        public async Task<IActionResult> Put(int MyEventId, MyEventDTO model)
         {
             try
             {
@@ -95,11 +97,13 @@ namespace NilDevStudio.WebAPI.Controllers
 
                 if(myEvent == null) return NotFound();
 
-                _repository.Update(model);
+				_mapper.Map(model, myEvent);
+
+                _repository.Update(myEvent);
 
                 if(await _repository.SaveChangesAsync())
                 {
-                    return Created($"/api/myEvent/{model.Id}", model);
+                    return Created($"/api/myEvent/{model.Id}", _mapper.Map<MyEventDTO>(myEvent));
                 }
 
             }

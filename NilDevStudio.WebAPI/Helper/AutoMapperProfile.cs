@@ -12,15 +12,15 @@ namespace NilDevStudio.WebAPI.Helper
 			CreateMap<MyEvent, MyEventDTO>()
 				.ForMember(dest => dest.Speakers, opt => {
 					opt.MapFrom(src => src.EventSpeakers.Select(x => x.Speaker).ToList());
-				});
+				}).ReverseMap();
 
 			CreateMap<Speaker, SpeakerDTO>()
 				.ForMember(dest => dest.MyEvents, opt => {
 					opt.MapFrom(src => src.EventSpeakers.Select(x => x.MyEvent).ToList());
-				});
+				}).ReverseMap();
 
-			CreateMap<Lot, LotDTO>();
-			CreateMap<SocialNetwork, SocialNetworkDTO>();
+			CreateMap<Lot, LotDTO>().ReverseMap();
+			CreateMap<SocialNetwork, SocialNetworkDTO>().ReverseMap();
 		}
     }
 }
