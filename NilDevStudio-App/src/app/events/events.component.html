@@ -44,7 +44,7 @@
             <td>
                 <img
                 *ngIf="imageToggle"
-                src="http://localhost:5000/resources/images/{{ event.imageURL }}"
+                src="http://localhost:5000/resources/images/{{ event.imageURL }}?_pog={{ dateNow }}"
                 [style.width.px]="imageWidth"
                 [style.margin.px]="imageMargin"
                 />

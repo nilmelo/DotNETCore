@@ -23,21 +23,21 @@ export class MyEventService
 
     getMyEventByTheme(theme: string): Observable<MyEvent[]>
     {
-        return this.http.get<MyEvent[]>('${this.baseURL}/getByTheme/${theme}');
+        return this.http.get<MyEvent[]>(`${this.baseURL}/getByTheme/${theme}`);
     }
 
     getMyEventById(id: number): Observable<MyEvent>
     {
-        return this.http.get<MyEvent>('${this.baseURL}/${id}');
+        return this.http.get<MyEvent>(`${this.baseURL}/${id}`);
 	}
 
-	postUpload(file: File)
+	postUpload(file: File, name: string)
 	{
 		const fileToUpload = <File>file[0];
 		const formData = new FormData();
-		formData.append('file', fileToUpload, fileToUpload.name);
+		formData.append('file', fileToUpload, name);
 
-		return this.http.post('${this.baseURL}/upload', formData);
+		return this.http.post(`${this.baseURL}/upload`, formData);
 	}
 
 	postMyEvent(myEvent: MyEvent)
@@ -47,12 +47,12 @@ export class MyEventService
 
 	putMyEvent(myEvent: MyEvent)
 	{
-		return this.http.put(this.baseURL+'/'+ myEvent.id, myEvent);
+		return this.http.put(`${this.baseURL}/${myEvent.id}`, myEvent);
     }
 
     deleteMyEvent(id: number)
     {
-        return this.http.delete(this.baseURL+'/'+id);
+        return this.http.delete(`${this.baseURL}/${id}`);
     }
 
 }

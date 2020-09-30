@@ -29,6 +29,8 @@ export class EventsComponent implements OnInit
 	saveMod = 'post';
 	bodyDeleteEvent = '';
 	file: File;
+	fileNameToUpdate: string;
+	dateNow: string;
 
 	_filterList: string;
 
@@ -44,11 +46,10 @@ export class EventsComponent implements OnInit
 	{
 		this.saveMod = 'put';
 		this.openModal(template);
-		this.myEvent = myEvent;
-
-		myEvent.imageURL = '';
-
-		this.registerForm.patchValue(myEvent);
+		this.myEvent = Object.assign({}, myEvent);
+		this.fileNameToUpdate = myEvent.imageURL.toString();
+		this.myEvent.imageURL = '';
+		this.registerForm.patchValue(this.myEvent);
 	}
 
 	newEvent(template: any)
@@ -114,6 +115,32 @@ export class EventsComponent implements OnInit
 		}
 	}
 
+	uploadImage()
+	{
+		if(this.saveMod === 'post')
+		{
+			const fileName = this.myEvent.imageURL.split('\\', 3);
+			this.myEvent.imageURL = fileName[2];
+
+			this.myEventService.postUpload(this.file, fileName[2]).subscribe(
+				() => {
+					this.dateNow = new Date().getMilliseconds().toString();
+					this.getEvents();
+				}
+			);
+		}
+		else
+		{
+			this.myEvent.imageURL = this.fileNameToUpdate;
+			this.myEventService.postUpload(this.file, this.fileNameToUpdate).subscribe(
+				() => {
+				this.dateNow = new Date().getMilliseconds().toString();
+				this.getEvents();
+				}
+			);
+		}
+
+	}
 	saveChanges(template: any)
 	{
 		if(this.registerForm.valid)
@@ -122,11 +149,7 @@ export class EventsComponent implements OnInit
 			{
 				this.myEvent = Object.assign({}, this.registerForm.value);
 
-				// TODO: Deletar copias no banco sendo acumuladas
-				// TODO: Código repetido, necessita limpeza
-				this.myEventService.postUpload(this.file).subscribe();
-				const fileName = this.myEvent.imageURL.split('\\', 3);
-				this.myEvent.imageURL = fileName[2];
+				this.uploadImage();
 
 				this.myEventService.postMyEvent(this.myEvent).subscribe(
 					(newEvent: MyEvent) => {
@@ -144,9 +167,7 @@ export class EventsComponent implements OnInit
 			{
 				this.myEvent = Object.assign({id: this.myEvent.id}, this.registerForm.value);
 
-				this.myEventService.postUpload(this.file).subscribe();
-				const fileName = this.myEvent.imageURL.split('\\', 3);
-				this.myEvent.imageURL = fileName[2];
+				this.uploadImage();
 
 				this.myEventService.putMyEvent(this.myEvent).subscribe(
 					() => {
