@@ -16,6 +16,10 @@ using AutoMapper;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using NilDevStudio.Domain.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace NilDevStudio.WebAPI
 {
@@ -32,12 +36,35 @@ namespace NilDevStudio.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<NilDevContext>(
-                x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<INilDevRepository, NilDevRepository>();
+                x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
+			);
 
+			IdentityBuilder builder = services.AddIdentityCore<User>(options =>
+			{
+				options.Password.RequireDigit = false;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireLowercase = false;
+				options.Password.RequireUppercase = false;
+				options.Password.RequireLength = 4;
+			});
+
+			builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+			builder.AddEntityFrameworkStores<NilDevContext>();
+			builder.AddRoleValidator<RoleValidator<Role>>();
+			builder.AddRoleManager<RoleManager<Role>>();
+			builder.AddSignInManager<SignInManager<User>>();
+
+			services.AddMvc(AppDomainManagerInitializationOptions => {
+				var policy = new AuthorizationPolicyBuilder()
+					.RequiredAuthenticatedUser()
+					.Build();
+				options.Filters.Add(new AuthorizeFilter(policy));
+			})
+			.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+			.AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+			services.AddScoped<INilDevRepository, NilDevRepository>();
 			services.AddAutoMapper();
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
         }
 

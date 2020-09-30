@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NilDevStudio.Domain;
+using NilDevStudio.Domain.Identity;
 
 namespace NilDevStudio.Repository
 {
-    public class NilDevContext : DbContext
+    public class NilDevContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int> >
     {
         public DbSet<MyEvent> MyEvents { get; set; }
         public DbSet<Speaker> Speakers { get; set; }
@@ -19,6 +22,24 @@ namespace NilDevStudio.Repository
         // Describing the relationship m to n
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<UserRole>(userRole =>
+				{
+					userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
+
+					userRole.HasOne(ur => ur.Role)
+						.WithMany(r => r.UserRoles)
+						.HasForeignKey(ur => ur.RoleId)
+						.IsRequired();
+
+					userRole.HasOne(ur => ur.User)
+						.WithMany(r => r.UserRoles)
+						.HasForeignKey(ur => ur.UserId)
+						.IsRequired();
+				}
+			);
+
             modelBuilder.Entity<EventSpeaker>()
                 .HasKey(PE => new {PE.MyEventId, PE.SpeakerId});
         }
