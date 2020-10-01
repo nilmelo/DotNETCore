@@ -2,6 +2,7 @@ using AutoMapper;
 using NilDevStudio.Domain;
 using NilDevStudio.WebAPI.DTO;
 using System.Linq;
+using NilDevStudio.Domain.Identity;
 
 namespace NilDevStudio.WebAPI.Helper
 {
@@ -21,6 +22,9 @@ namespace NilDevStudio.WebAPI.Helper
 
 			CreateMap<Lot, LotDTO>().ReverseMap();
 			CreateMap<SocialNetwork, SocialNetworkDTO>().ReverseMap();
+
+			CreateMap<User, UserDTO>().ReverseMap();
+			CreateMap<User, UserLoginDTO>().ReverseMap();
 		}
     }
 }

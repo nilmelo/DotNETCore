@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Identity;
 using NilDevStudio.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace NilDevStudio.WebAPI
 {
@@ -54,6 +56,20 @@ namespace NilDevStudio.WebAPI
 			builder.AddRoleManager<RoleManager<Role>>();
 			builder.AddSignInManager<SignInManager<User>>();
 
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer(options =>
+				{
+					options.TokenValidationParameters = new TokenValidationParameters
+					{
+						ValidateIssuerSigningKey = true,
+						IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+							.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+						ValidateIssuer = false,
+						ValidateAudience = false
+					};
+				}
+			);
+
 			services.AddMvc(AppDomainManagerInitializationOptions => {
 				var policy = new AuthorizationPolicyBuilder()
 					.RequiredAuthenticatedUser()
@@ -80,6 +96,8 @@ namespace NilDevStudio.WebAPI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+			app.UseAuthentication();
 
             //app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
