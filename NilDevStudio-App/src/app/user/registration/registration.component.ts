@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-registration',
@@ -10,11 +13,13 @@ import { ToastrService } from 'ngx-toastr';
 export class RegistrationComponent implements OnInit
 {
 	registerForm: FormGroup;
+	user: User;
 
-	constructor(public fb: FormBuilder, private toastr: ToastrService)
-	{
-
-	}
+	constructor(
+		private authService: AuthService,
+		public router: Router,
+		private fb: FormBuilder,
+		private toastr: ToastrService){}
 
 	ngOnInit(){}
 
@@ -50,7 +55,32 @@ export class RegistrationComponent implements OnInit
 
 	registerUser()
 	{
-		console.log("register user");
+		if(this.registerForm.valid)
+		{
+			this.user = Object.assign(
+				{password: this.registerForm.get('passwords.password').value},
+				this.registerForm.value);
+
+			this.authService.register(this.user).subscribe(
+				() => {
+					this.router.navigate(['/user/login']);
+					this.toastr.success('Cadastro Realizado');
+				},
+				error => {
+					const err = error.error;
+					err.forEach(element => {
+						switch(element.code) {
+							case 'DuplicatedUserName':
+								this.toastr.error('Account already exist');
+								break;
+							default:
+								this.toastr.error(`Error: ${element.code}`);
+								break;
+						}
+					});
+				}
+			)
+		}
 	}
 
 }

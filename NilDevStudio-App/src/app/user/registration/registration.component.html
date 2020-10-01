@@ -7,7 +7,7 @@
 	<div class="col-md-6">
 	  <form [formGroup]="registerForm">
 		<div class="form-group required">
-		  <label for="">Nome Completo:</label>
+		  <label for="">Full Name:</label>
 		  <input type="text" class="form-control" formControlName="fullName"
 		  [ngClass]="{'is-invalid': registerForm.get('fullName').errors &&
 									registerForm.get('fullName').touched }"
@@ -15,7 +15,7 @@
 		  <div *ngIf="registerForm.get('fullName').hasError('required') &&
 					  registerForm.get('fullName').touched"
 			class="invalid-feedback">
-			Nome Completo é obrigatório.
+			Full name required.
 		  </div>
 		</div>
 		<div class="form-group">
@@ -27,14 +27,14 @@
 		  <div *ngIf="registerForm.get('email').hasError('required') &&
 					  registerForm.get('email').touched"
 			class="invalid-feedback">
-			email é obrigatório.
+			Email required.
 		  </div>
 		  <div *ngIf="registerForm.get('email').hasError('email') && registerForm.get('email').touched" Class="invalid-feedback">
 			Exemple: email@email.com
 		</div>
 		</div>
 		<div class="form-group">
-		  <label for="">Usuario:</label>
+		  <label for="">User:</label>
 		  <input class="form-control" type="text" formControlName="userName"
 			[ngClass]="{'is-invalid': registerForm.get('userName').errors &&
 									  registerForm.get('userName').touched}"
@@ -42,12 +42,12 @@
 		  <div *ngIf="registerForm.get('userName').hasError('required') &&
 					  registerForm.get('userName').touched"
 			class="invalid-feedback">
-			Usuário é obrigatório.
+			User required.
 		  </div>
 		</div>
 		<div formGroupName="passwords">
 		  <div class="form-group">
-			<label for="">Senha:</label>
+			<label for="">Password:</label>
 			<input class="form-control" type="password" formControlName="password"
 			  [ngClass]="{ 'is-invalid': registerForm.get('passwords.password').errors &&
 										 registerForm.get('passwords.password').touched}"
@@ -55,16 +55,16 @@
 			  <div *ngIf="registerForm.get('passwords.password').hasError('minlength') &&
 			  registerForm.get('passwords.password').touched"
 			  class="invalid-feedback">
-			  Deve conter no mínimo 4 caracters
+			  Min 4 characters
 			</div>
 			<div *ngIf="registerForm.get('passwords.password').hasError('required') &&
 						registerForm.get('passwords.password').touched"
 			  class="invalid-feedback">
-			  Senha é obrigatório.
+			  Password required.
 			</div>
 		  </div>
 		  <div class="form-group">
-			<label for="">Confirmar Senha:</label>
+			<label for="">Repeat Password:</label>
 			<input class="form-control" type="password" formControlName="confirmPassword"
 			  [ngClass]="{ 'is-invalid': registerForm.get('passwords.confirmPassword').errors
 						   && registerForm.get('passwords.confirmPassword').touched
@@ -74,18 +74,18 @@
 			<div *ngIf="registerForm.get('passwords.confirmPassword').hasError('required') &&
 						registerForm.get('passwords.confirmPassword').touched"
 			  class="invalid-feedback">
-			  Confirme a Senha
+			  Password Required
 			</div>
 			<div *ngIf="registerForm.get('passwords.confirmPassword').hasError('mismatch')
 						&& registerForm.get('passwords.confirmPassword').touched"
 			  class="invalid-feedback">
-			  Confirmação não confere
+			  Confirmation does not match
 			</div>
 		  </div>
 		</div>
 		<div class="form-row">
 		  <div class="form-group col-md-8 offset-md-2">
-			<button class="btn btn-lg btn-success btn-block" [disabled]="!registerForm.valid" (click)="registerUser()">Registar</button>
+			<button class="btn btn-lg btn-success btn-block" [disabled]="!registerForm.valid" (click)="registerUser()">Sign In</button>
 		  </div>
 		</div>
 	  </form>
