@@ -18,7 +18,9 @@ import { SpeakersComponent } from './speakers/speakers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContactComponent } from './contact/contact.component';
 import { TitleComponent } from './shared/title/title.component';
-
+import { UserComponent } from './user/user.component';
+import { RegistrationComponent } from './user/registration/registration.component';
+import { LoginComponent } from './user/login/login.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,10 @@ import { TitleComponent } from './shared/title/title.component';
       SpeakersComponent,
       DashboardComponent,
 	  ContactComponent,
-	  TitleComponent
+	  TitleComponent,
+	  UserComponent,
+	  LoginComponent,
+	  RegistrationComponent
    ],
   imports: [
     BrowserModule,
