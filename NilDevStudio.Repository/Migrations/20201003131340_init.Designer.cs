@@ -9,7 +9,7 @@ using NilDevStudio.Repository;
 namespace NilDevStudio.Repository.Migrations
 {
     [DbContext(typeof(NilDevContext))]
-    [Migration("20200930151424_init")]
+    [Migration("20201003131340_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

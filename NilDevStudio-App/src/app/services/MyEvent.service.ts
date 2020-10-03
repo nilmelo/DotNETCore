@@ -9,16 +9,13 @@ import { MyEvent } from '../models/MyEvent';
 })
 export class MyEventService
 {
-    baseURL = 'http://localhost:5000/api/myEvent';
+	baseURL = 'http://localhost:5000/api/myEvent';
 
-    constructor(private http: HttpClient)
-    {
-
-    }
+    constructor(private http: HttpClient) {}
 
     getAllMyEvent(): Observable<MyEvent[]>
     {
-        return this.http.get<MyEvent[]>(this.baseURL);
+		return this.http.get<MyEvent[]>(this.baseURL);
     }
 
     getMyEventByTheme(theme: string): Observable<MyEvent[]>

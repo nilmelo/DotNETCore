@@ -12,6 +12,8 @@ using System.Text;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using NilDevStudio.WebAPI.DTO;
+using System;
 
 namespace NilDevStudio.WebAPI.Controllers
 {
@@ -26,16 +28,16 @@ namespace NilDevStudio.WebAPI.Controllers
 
 		public UserController(IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
 		{
-			_config = config;
-			_userManager = userManager;
 			_signInManager = signInManager;
 			_mapper = mapper;
+			_config = config;
+			_userManager = userManager;
 		}
 
 		[HttpGet("GetUser")]
 		public async Task<IActionResult> GetUser()
 		{
-			return Ok(new UserDTO);// Novo objeto para Testes
+			return Ok(new UserDTO());
 		}
 
 		[HttpPost("Register")]
@@ -46,7 +48,7 @@ namespace NilDevStudio.WebAPI.Controllers
 			{
 				var user = _mapper.Map<User>(userDto);
 				var result = await _userManager.CreateAsync(user, userDto.Password);
-				var userToReturn = _mapper.Map<UserDto>(user);
+				var userToReturn = _mapper.Map<UserDTO>(user);
 
 				if(result.Succeeded)
 				{
@@ -73,7 +75,7 @@ namespace NilDevStudio.WebAPI.Controllers
 				if(result.Succeeded)
 				{
 					var appUser = await _userManager.Users
-						.FirstOrDefaultAsync(u => u.NormalizedUseName == userLogin.UserName.ToUpper());
+						.FirstOrDefaultAsync(u => u.NormalizedUserName == userLogin.UserName.ToUpper());
 
 					var userToReturn = _mapper.Map<UserLoginDTO>(appUser);
 

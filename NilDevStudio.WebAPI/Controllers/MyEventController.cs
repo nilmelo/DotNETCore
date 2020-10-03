@@ -66,7 +66,7 @@ namespace NilDevStudio.WebAPI.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Error occurred in database");
             }
 
-			return BadRequest("Upload Error");
+			//return BadRequest("Upload Error");
         }
 
         [HttpGet("{MyEventId}")]

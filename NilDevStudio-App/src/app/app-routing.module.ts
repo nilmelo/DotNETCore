@@ -7,6 +7,7 @@ import { ContactComponent } from './contact/contact.component';
 import { UserComponent } from './user/user.component';
 import { LoginComponent } from './user/login/login.component';
 import { RegistrationComponent } from './user/registration/registration.component';
+import { AuthGuard } from './auth/auth.guard';
 
 
 const routes: Routes = [
@@ -18,10 +19,11 @@ const routes: Routes = [
 		]
 	},
 
-	{ path: 'events', component: EventsComponent },
-	{ path: 'speakers', component: SpeakersComponent },
-	{ path: 'dashboard', component: DashboardComponent },
-	{ path: 'contact', component: ContactComponent },
+	{ path: 'events', component: EventsComponent, canActivate: [AuthGuard] },
+	{ path: 'speakers', component: SpeakersComponent, canActivate: [AuthGuard] },
+	{ path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+	{ path: 'contact', component: ContactComponent, canActivate: [AuthGuard] },
+
 	{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 	{ path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
 ];

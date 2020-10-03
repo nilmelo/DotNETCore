@@ -17,11 +17,13 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using NilDevStudio.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using NilDevStudio.Domain;
+using NilDevStudio.Domain.Identity;
 
 namespace NilDevStudio.WebAPI
 {
@@ -37,6 +39,7 @@ namespace NilDevStudio.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<NilDevContext>(
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
 			);
@@ -47,7 +50,7 @@ namespace NilDevStudio.WebAPI
 				options.Password.RequireNonAlphanumeric = false;
 				options.Password.RequireLowercase = false;
 				options.Password.RequireUppercase = false;
-				options.Password.RequireLength = 4;
+				options.Password.RequiredLength = 4;
 			});
 
 			builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
@@ -70,9 +73,9 @@ namespace NilDevStudio.WebAPI
 				}
 			);
 
-			services.AddMvc(AppDomainManagerInitializationOptions => {
+			services.AddMvc(options => {
 				var policy = new AuthorizationPolicyBuilder()
-					.RequiredAuthenticatedUser()
+					.RequireAuthenticatedUser()
 					.Build();
 				options.Filters.Add(new AuthorizeFilter(policy));
 			})

@@ -21,13 +21,15 @@ export class RegistrationComponent implements OnInit
 		private fb: FormBuilder,
 		private toastr: ToastrService){}
 
-	ngOnInit(){}
+	ngOnInit(){
+		this.validation();
+	}
 
 	validation()
 	{
 		this.registerForm = this.fb.group({
 			fullName: ['', Validators.required],
-			email: ['',[Validators.required, Validators.email]],
+			email: ['', [Validators.required, Validators.email]],
 			userName: ['', Validators.required],
 			passwords: this.fb.group({
 				password: ['', [Validators.required, Validators.minLength(4)]],
@@ -64,13 +66,13 @@ export class RegistrationComponent implements OnInit
 			this.authService.register(this.user).subscribe(
 				() => {
 					this.router.navigate(['/user/login']);
-					this.toastr.success('Cadastro Realizado');
+					this.toastr.success('successfully registered');
 				},
 				error => {
 					const err = error.error;
 					err.forEach(element => {
 						switch(element.code) {
-							case 'DuplicatedUserName':
+							case 'DuplicateUserName':
 								this.toastr.error('Account already exist');
 								break;
 							default:
@@ -79,7 +81,7 @@ export class RegistrationComponent implements OnInit
 						}
 					});
 				}
-			)
+			);
 		}
 	}
 

@@ -8,9 +8,10 @@ import { map } from 'rxjs/operators';
 })
 export class AuthService
 {
-	baseURL = 'http://localhost:5000/api/user';
+	baseURL = 'http://localhost:5000/api/user/';
 	jwtHelper = new JwtHelperService();
 	decodedToken: any;
+	tokenOk = false;
 
 	constructor(private http: HttpClient) { }
 
@@ -23,6 +24,7 @@ export class AuthService
 					if(user) {
 						localStorage.setItem('token', user.token);
 						this.decodedToken = this.jwtHelper.decodeToken(user.token);
+						sessionStorage.setItem('username', this.decodedToken);
 					}
 				})
 			);
@@ -35,8 +37,15 @@ export class AuthService
 
 	loggedIn()
 	{
-		const token = localStorage.getItem('token');
-		return !this.jwtHelper.isTokenExpired(token);
+		const token = localStorage.getItem('token');     
+		this.tokenOk = this.jwtHelper.isTokenExpired(token);
+
+		if (this.tokenOk)
+		{       
+			window.localStorage.removeItem('token');     
+		}
+
+		return !this.tokenOk;
 	}
 
 }

@@ -16,6 +16,11 @@ export class NavComponent implements OnInit
 
 	ngOnInit() {}
 
+	showMenu()
+	{
+		return this.router.url !== '/user/login';
+	}
+
 	loggedIn()
 	{
 		return this.authService.loggedIn();
@@ -30,6 +35,11 @@ export class NavComponent implements OnInit
 	{
 		localStorage.removeItem('token');
 		this.router.navigate(['/user/login']);
+	}
+
+	userName()
+	{
+		return sessionStorage.getItem('username');
 	}
 
 }

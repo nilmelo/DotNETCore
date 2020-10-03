@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit
 {
 	title = 'Login';
-	model: any ={};
+	model: any = {};
 
 	constructor(
 		private authService: AuthService,
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit
 
 	ngOnInit()
 	{
-		if(localStorage.getItem('token') !== null)
+		if(localStorage.getItem('token') != null)
 		{
 			this.router.navigate(['/dashboard']);
 		}
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit
 					this.router.navigate(['/dashboard']);
 				},
 				error => {
-					this.toastr.error('Error occurred while logging');
+					this.toastr.error('Account does not exist');
 				}
 			);
 	}
