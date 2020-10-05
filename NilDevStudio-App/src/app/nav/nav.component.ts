@@ -21,11 +21,6 @@ export class NavComponent implements OnInit
 		return this.router.url !== '/user/login';
 	}
 
-	showMenu()
-	{
-		return this.router.url !== '/user/login';
-	}
-
 	loggedIn()
 	{
 		return this.authService.loggedIn();
