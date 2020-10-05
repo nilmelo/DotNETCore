@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using NilDevStudio.WebAPI.DTO;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Linq;
 
 namespace NilDevStudio.WebAPI.Controllers
 {
@@ -126,8 +127,22 @@ namespace NilDevStudio.WebAPI.Controllers
             try
             {
                 var myEvent = await _repository.GetEventById(MyEventId, false);
-
                 if(myEvent == null) return NotFound();
+
+				var idLots = new List<int>();
+				var idSocial = new List<int>();
+
+				model.Lots.ForEach(item => idLots.Add(item.Id));
+                model.SocialNetworks.ForEach(item => idSocial.Add(item.Id));
+
+				var lots = myEvent.Lots.Where(lot => !idLots.Contains(lot.Id)).ToArray();
+				var socialNetworks = myEvent.SocialNetworks.Where(net => !idLots.Contains(net.Id)).ToArray();
+
+                if(lots.Length > 0)
+                    _repository.DeleteRange(lots);
+
+                if(socialNetworks.Length > 0)
+                    _repository.DeleteRange(socialNetworks);
 
 				_mapper.Map(model, myEvent);
 

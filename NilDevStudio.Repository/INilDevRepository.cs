@@ -6,9 +6,10 @@ namespace NilDevStudio.Repository
     public interface INilDevRepository
     {
          // General
-         void Add<T>(T entity) where T: class;
-         void Update<T>(T entity) where T: class;
-         void Delete<T>(T entity) where T: class;
+         void Add<T>(T entity) where T : class;
+         void Update<T>(T entity) where T : class;
+         void Delete<T>(T entity) where T : class;
+		 void DeleteRange<T>(T[] entity) where T : class;
          Task<bool> SaveChangesAsync();
 
          // Events
@@ -19,6 +20,6 @@ namespace NilDevStudio.Repository
          //Speaker
          Task<Speaker[]> GetAllSpeakersByName(string name, bool events);
          Task<Speaker> GetSpeaker(int speakerId, bool events);
-         
+
     }
 }

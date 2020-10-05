@@ -24,7 +24,7 @@ export class AuthService
 					if(user) {
 						localStorage.setItem('token', user.token);
 						this.decodedToken = this.jwtHelper.decodeToken(user.token);
-						sessionStorage.setItem('username', this.decodedToken);
+						sessionStorage.setItem('username', this.decodedToken.unique_name);
 					}
 				})
 			);
@@ -37,12 +37,12 @@ export class AuthService
 
 	loggedIn()
 	{
-		const token = localStorage.getItem('token');     
+		const token = localStorage.getItem('token');
 		this.tokenOk = this.jwtHelper.isTokenExpired(token);
 
 		if (this.tokenOk)
-		{       
-			window.localStorage.removeItem('token');     
+		{
+			window.localStorage.removeItem('token');
 		}
 
 		return !this.tokenOk;

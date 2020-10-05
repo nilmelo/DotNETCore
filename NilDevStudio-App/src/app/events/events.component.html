@@ -40,7 +40,7 @@
 			<th>Date</th>
 			<th>Qtd People</th>
 			<th>Lot</th>
-			<th>Options</th>
+			<th colspan="2">Options</th>
 		</tr>
 	</thead>
 	<tbody *ngIf="events && events?.length > 0">
@@ -83,6 +83,11 @@
 						<i class="fa fa-eraser"></i>
 					</button>
 				</div>
+			</td>
+			<td>
+				<a [routerLink]="['/event', event.id, 'edit']" tooltip="Edit Detail" class="btn btn-sm btn-warning">
+					<i class="fa fa-edit"></i>
+				</a>
 			</td>
 		</tr>
 	</tbody>
@@ -324,7 +329,7 @@
 
 					<div class="form-row">
 						<div class="form-group col-md-8">
-							<label>Telephone</label>
+							<label>Telephone Number</label>
 
 							<input
 								type="text"

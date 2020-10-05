@@ -176,7 +176,6 @@ export class EventsComponent implements OnInit
 						this.toastr.success('Successfully Edited!');
 					}, error => {
 						this.toastr.error('Edit Error');
-						console.log(error);
 					}
 				);
 			}
@@ -185,6 +184,8 @@ export class EventsComponent implements OnInit
 
 	getEvents()
 	{
+		this.dateNow = new Date().getMilliseconds().toString();
+
 		this.myEventService.getAllMyEvent().subscribe(
 			(_myEvents: MyEvent[]) => {
 				this.events = _myEvents;
