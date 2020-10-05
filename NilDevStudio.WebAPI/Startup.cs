@@ -41,7 +41,7 @@ namespace NilDevStudio.WebAPI
         {
 
             services.AddDbContext<NilDevContext>(
-                x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
+                x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
 			);
 
 			IdentityBuilder builder = services.AddIdentityCore<User>(options =>
